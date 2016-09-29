@@ -1,0 +1,341 @@
+# project NDNMacaroon (0.1) configured on Fri Sep 23 13:14:04 2016 by
+# waf 1.8.2 (abi 98, python 2070bf0 on linux2)
+# using ./waf configure
+#
+----------------------------------------
+Setting top to
+/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon
+----------------------------------------
+Setting out to
+/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build
+----------------------------------------
+Checking for 'gcc' (C compiler)
+find program=['gcc', 'cc'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin'] var='CC' -> ['/usr/bin/gcc']
+find program=['ar'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin'] var='AR' -> ['/usr/bin/ar']
+/usr/bin/gcc
+----------------------------------------
+Checking for 'g++' (C++ compiler)
+find program=['g++', 'c++'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin'] var='CXX' -> ['/usr/bin/g++']
+(tool ar is already loaded, skipping)
+/usr/bin/g++
+----------------------------------------
+Checking for program 'doxygen'
+/usr/bin/doxygen
+find program=['doxygen'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin'] var='DOXYGEN' -> ['/usr/bin/doxygen']
+----------------------------------------
+Checking for program 'tar'
+/bin/tar
+find program=['tar'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin'] var='TAR' -> ['/bin/tar']
+----------------------------------------
+Checking for program 'sphinx-build'
+/usr/bin/sphinx-build
+find program=['sphinx-build'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin'] var='SPHINX_BUILD' -> ['/usr/bin/sphinx-build']
+----------------------------------------
+Checking supported CXXFLAGS
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_5043890d55364c73316ff1d40ba5fb1f/test.cpp[0m
+
+['/usr/bin/g++', '-Werror', '-std=c++0x', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_5043890d55364c73316ff1d40ba5fb1f/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_5043890d55364c73316ff1d40ba5fb1f/testbuild/testprog[0m
+
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_5043890d55364c73316ff1d40ba5fb1f/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_60f13c3ff024f8cf3f59bbe8b2cd89e6/test.cpp[0m
+
+['/usr/bin/g++', '-Werror', '-std=c++11', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_60f13c3ff024f8cf3f59bbe8b2cd89e6/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_60f13c3ff024f8cf3f59bbe8b2cd89e6/testbuild/testprog[0m
+
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_60f13c3ff024f8cf3f59bbe8b2cd89e6/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_069e801d12bd1b1bbef4e4c0a4126e1b/test.cpp[0m
+
+['/usr/bin/g++', '-Werror', '-stdlib=libc++', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_069e801d12bd1b1bbef4e4c0a4126e1b/testbuild/test.cpp.1.o']
+err: g++: error: unrecognized command line option ‘-stdlib=libc++’
+
+from /home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon: Test does not build: Traceback (most recent call last):
+  File "/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/.waf-1.8.2-a01aa13963437a19e5d8748cf2afd71b/waflib/Configure.py", line 337, in run_build
+    bld.compile()
+  File "/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/.waf-1.8.2-a01aa13963437a19e5d8748cf2afd71b/waflib/Build.py", line 184, in compile
+    raise Errors.BuildError(self.producer.error)
+BuildError: Build failed
+ -> task in 'testprog' failed (exit status 1): 
+	{task 140178618336656: cxx test.cpp -> test.cpp.1.o}
+['/usr/bin/g++', '-Werror', '-stdlib=libc++', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_069e801d12bd1b1bbef4e4c0a4126e1b/testbuild/test.cpp.1.o']
+
+from /home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon: The configuration failed
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_d5f37d671065f95af06da6b1ea063140/test.cpp[0m
+
+['/usr/bin/g++', '-Werror', '-Wall', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_d5f37d671065f95af06da6b1ea063140/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_d5f37d671065f95af06da6b1ea063140/testbuild/testprog[0m
+
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_d5f37d671065f95af06da6b1ea063140/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_38166a1d8ed3991e9abf9f1e7b955eb8/test.cpp[0m
+
+['/usr/bin/g++', '-Werror', '-Wno-long-long', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_38166a1d8ed3991e9abf9f1e7b955eb8/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_38166a1d8ed3991e9abf9f1e7b955eb8/testbuild/testprog[0m
+
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_38166a1d8ed3991e9abf9f1e7b955eb8/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_16b0dc22d9a30d857290d5ec781a8ead/test.cpp[0m
+
+['/usr/bin/g++', '-Werror', '-Wno-nested-anon-types', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_16b0dc22d9a30d857290d5ec781a8ead/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_16b0dc22d9a30d857290d5ec781a8ead/testbuild/testprog[0m
+
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_16b0dc22d9a30d857290d5ec781a8ead/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_0ef14de27337911d28fce419cd2bc145/test.cpp[0m
+
+['/usr/bin/g++', '-Werror', '-O2', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_0ef14de27337911d28fce419cd2bc145/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_0ef14de27337911d28fce419cd2bc145/testbuild/testprog[0m
+
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_0ef14de27337911d28fce419cd2bc145/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_7da5a455e851d9a6ac56f6c58188008f/test.cpp[0m
+
+['/usr/bin/g++', '-Werror', '-g', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_7da5a455e851d9a6ac56f6c58188008f/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_7da5a455e851d9a6ac56f6c58188008f/testbuild/testprog[0m
+
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_7da5a455e851d9a6ac56f6c58188008f/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+-std=c++0x -std=c++11 -Wall -Wno-long-long -Wno-nested-anon-types -O2 -g
+----------------------------------------
+Checking supported LINKFLAGS
+==>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_696981c9139cbae5a1e31988513032ab/test.cpp[0m
+
+['/usr/bin/g++', '-std=c++0x', '-std=c++11', '-Wall', '-Wno-long-long', '-Wno-nested-anon-types', '-O2', '-g', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_696981c9139cbae5a1e31988513032ab/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_696981c9139cbae5a1e31988513032ab/testbuild/testprog[0m
+
+['/usr/bin/g++', '-Werror', '-stdlib=libc++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_696981c9139cbae5a1e31988513032ab/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+err: g++: error: unrecognized command line option ‘-stdlib=libc++’
+
+from /home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon: Test does not build: Traceback (most recent call last):
+  File "/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/.waf-1.8.2-a01aa13963437a19e5d8748cf2afd71b/waflib/Configure.py", line 337, in run_build
+    bld.compile()
+  File "/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/.waf-1.8.2-a01aa13963437a19e5d8748cf2afd71b/waflib/Build.py", line 184, in compile
+    raise Errors.BuildError(self.producer.error)
+BuildError: Build failed
+ -> task in 'testprog' failed (exit status 1): 
+	{task 140178617439248: cxxprogram test.cpp.1.o -> testprog}
+['/usr/bin/g++', '-Werror', '-stdlib=libc++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_696981c9139cbae5a1e31988513032ab/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+
+from /home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon: The configuration failed
+----------------------------------------
+Checking for program 'pkg-config'
+/usr/bin/pkg-config
+find program=['pkg-config'] paths=['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin'] var='PKGCONFIG' -> ['/usr/bin/pkg-config']
+----------------------------------------
+Checking for 'libndn-cxx'
+['/usr/bin/pkg-config', '--cflags', '--libs', 'libndn-cxx']
+out: -I/usr/local/include -L/usr/local/lib -lndn-cxx -lboost_system -lboost_filesystem -lboost_date_time -lboost_iostreams -lboost_regex -lboost_program_options -lboost_chrono -lboost_random -lcryptopp -lsqlite3 -lrt -lpthread
+
+yes
+----------------------------------------
+Checking boost includes
+1.58.0
+----------------------------------------
+Checking boost libs
+Found the boost path in /usr/lib/x86_64-linux-gnu with the libraries:
+    /usr/lib/x86_64-linux-gnu/libboost_atomic.a
+    /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+    /usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_chrono.a
+    /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+    /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_context.a
+    /usr/lib/x86_64-linux-gnu/libboost_context.so
+    /usr/lib/x86_64-linux-gnu/libboost_context.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_coroutine.a
+    /usr/lib/x86_64-linux-gnu/libboost_coroutine.so
+    /usr/lib/x86_64-linux-gnu/libboost_coroutine.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_date_time.a
+    /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+    /usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_exception.a
+    /usr/lib/x86_64-linux-gnu/libboost_filesystem.a
+    /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+    /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_graph.a
+    /usr/lib/x86_64-linux-gnu/libboost_graph.so
+    /usr/lib/x86_64-linux-gnu/libboost_graph.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_graph_parallel.a
+    /usr/lib/x86_64-linux-gnu/libboost_graph_parallel.so
+    /usr/lib/x86_64-linux-gnu/libboost_graph_parallel.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_iostreams.a
+    /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
+    /usr/lib/x86_64-linux-gnu/libboost_iostreams.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_locale.a
+    /usr/lib/x86_64-linux-gnu/libboost_locale.so
+    /usr/lib/x86_64-linux-gnu/libboost_locale.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_log.a
+    /usr/lib/x86_64-linux-gnu/libboost_log.so
+    /usr/lib/x86_64-linux-gnu/libboost_log.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_log_setup.a
+    /usr/lib/x86_64-linux-gnu/libboost_log_setup.so
+    /usr/lib/x86_64-linux-gnu/libboost_log_setup.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99.a
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99.so
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99f.a
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99f.so
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99f.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99l.a
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99l.so
+    /usr/lib/x86_64-linux-gnu/libboost_math_c99l.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1.a
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1.so
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1f.a
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1f.so
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1f.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1l.a
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1l.so
+    /usr/lib/x86_64-linux-gnu/libboost_math_tr1l.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_mpi.a
+    /usr/lib/x86_64-linux-gnu/libboost_mpi.so
+    /usr/lib/x86_64-linux-gnu/libboost_mpi.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_mpi_python-py27.a
+    /usr/lib/x86_64-linux-gnu/libboost_mpi_python-py27.so
+    /usr/lib/x86_64-linux-gnu/libboost_mpi_python-py27.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_mpi_python-py35.a
+    /usr/lib/x86_64-linux-gnu/libboost_mpi_python-py35.so
+    /usr/lib/x86_64-linux-gnu/libboost_mpi_python-py35.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_mpi_python.a
+    /usr/lib/x86_64-linux-gnu/libboost_mpi_python.so
+    /usr/lib/x86_64-linux-gnu/libboost_prg_exec_monitor.a
+    /usr/lib/x86_64-linux-gnu/libboost_prg_exec_monitor.so
+    /usr/lib/x86_64-linux-gnu/libboost_prg_exec_monitor.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_program_options.a
+    /usr/lib/x86_64-linux-gnu/libboost_program_options.so
+    /usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_python-py27.a
+    /usr/lib/x86_64-linux-gnu/libboost_python-py27.so
+    /usr/lib/x86_64-linux-gnu/libboost_python-py27.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_python-py35.a
+    /usr/lib/x86_64-linux-gnu/libboost_python-py35.so
+    /usr/lib/x86_64-linux-gnu/libboost_python-py35.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_python.a
+    /usr/lib/x86_64-linux-gnu/libboost_python.so
+    /usr/lib/x86_64-linux-gnu/libboost_random.a
+    /usr/lib/x86_64-linux-gnu/libboost_random.so
+    /usr/lib/x86_64-linux-gnu/libboost_random.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_regex.a
+    /usr/lib/x86_64-linux-gnu/libboost_regex.so
+    /usr/lib/x86_64-linux-gnu/libboost_regex.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_serialization.a
+    /usr/lib/x86_64-linux-gnu/libboost_serialization.so
+    /usr/lib/x86_64-linux-gnu/libboost_serialization.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_signals.a
+    /usr/lib/x86_64-linux-gnu/libboost_signals.so
+    /usr/lib/x86_64-linux-gnu/libboost_signals.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_system.a
+    /usr/lib/x86_64-linux-gnu/libboost_system.so
+    /usr/lib/x86_64-linux-gnu/libboost_system.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_test_exec_monitor.a
+    /usr/lib/x86_64-linux-gnu/libboost_thread.a
+    /usr/lib/x86_64-linux-gnu/libboost_thread.so
+    /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_timer.a
+    /usr/lib/x86_64-linux-gnu/libboost_timer.so
+    /usr/lib/x86_64-linux-gnu/libboost_timer.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.a
+    /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so
+    /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_wave.a
+    /usr/lib/x86_64-linux-gnu/libboost_wave.so
+    /usr/lib/x86_64-linux-gnu/libboost_wave.so.1.58.0
+    /usr/lib/x86_64-linux-gnu/libboost_wserialization.a
+    /usr/lib/x86_64-linux-gnu/libboost_wserialization.so
+    /usr/lib/x86_64-linux-gnu/libboost_wserialization.so.1.58.0
+Trying pattern boost_system(-gcc[0-9]{0,3})+(-1_58)+
+Trying pattern boost_system(-1_58)+
+Trying pattern boost_system(-1_58)+
+Trying pattern boost_system(-gcc[0-9]{0,3})+
+Trying pattern boost_system
+Found boost lib libboost_system.a
+Trying pattern boost_iostreams(-gcc[0-9]{0,3})+(-1_58)+
+Trying pattern boost_iostreams(-1_58)+
+Trying pattern boost_iostreams(-1_58)+
+Trying pattern boost_iostreams(-gcc[0-9]{0,3})+
+Trying pattern boost_iostreams
+Found boost lib libboost_iostreams.a
+ok
+----------------------------------------
+Checking for boost linkage
+==>
+
+#include <boost/system/error_code.hpp>
+int main() { boost::system::error_code c; }
+
+<==
+[1/2] Compiling [32mbuild/.conf_check_e3fd1d22317804a8f12925401a523ff6/test.cpp[0m
+
+['/usr/bin/g++', '-std=c++0x', '-std=c++11', '-Wall', '-Wno-long-long', '-Wno-nested-anon-types', '-O2', '-g', '-I/usr/include', '../test.cpp', '-c', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_e3fd1d22317804a8f12925401a523ff6/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_e3fd1d22317804a8f12925401a523ff6/testbuild/testprog[0m
+
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/djuanes/NDN/PFG-NDNMacaroons/libNDNMacaroon/build/.conf_check_e3fd1d22317804a8f12925401a523ff6/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib/x86_64-linux-gnu', '-lboost_system', '-lboost_iostreams']
+ok
