@@ -99,6 +99,9 @@ namespace macaroons {
 
     std::string
     getIdentifier();
+
+    std::string
+    getSignature();
       
   private:
     struct macaroon *M;

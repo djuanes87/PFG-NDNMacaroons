@@ -323,6 +323,16 @@ namespace macaroons {
     return std::string(identifier, identifier + identifier_sz);
   }
 
+  std::string
+  NDNMacaroon::getSignature()
+  {
+    const unsigned char* signature;
+    size_t sig_sz;
+    
+    macaroon_signature(M, &signature, &sig_sz);
+    return std::string(signature, signature + sig_sz);
+  }
+
 
 
   /*
