@@ -1,0 +1,38 @@
+ ndnsec-key-gen -n /ndn/keys/trust
+ ndnsec-sign-req /ndn/keys/trust > trust.cert 
+
+ ndnsec-key-gen -n /ndn/keys/producer > producer-unsigned.cert
+ ndnsec-cert-install producer-unsigned.cert
+ ndnsec-cert-gen -s /ndn/keys/trust -N "Producer" -r producer-unsigned.cert > producer-ksk.cert
+ ndnsec-cert-install producer-ksk.cert
+ ndnsec-key-gen -d /ndn/keys/producer > producer-dsk.cert
+ ndnsec-cert-install -f producer-dsk.cert
+
+ ndnsec-key-gen -n /ndn/keys/consumer1 > consumer1-unsigned.cert
+ ndnsec-cert-install consumer1-unsigned.cert
+ ndnsec-cert-gen -s /ndn/keys/trust -N "Consumer1" -r consumer1-unsigned.cert > consumer1-ksk.cert
+ ndnsec-cert-install consumer1-ksk.cert
+  ndnsec-key-gen -d /ndn/keys/consumer1 > consumer1-dsk.cert
+ ndnsec-cert-install -f consumer1-dsk.cert
+
+ndnsec-key-gen -n /ndn/keys/consumer2 > consumer2-unsigned.cert
+ ndnsec-cert-install consumer2-unsigned.cert
+ ndnsec-cert-gen -s /ndn/keys/trust -N "Consumer2" -r consumer2-unsigned.cert > consumer2-ksk.cert
+ ndnsec-cert-install consumer2-ksk.cert
+  ndnsec-key-gen -d /ndn/keys/consumer2 > consumer2-dsk.cert
+ ndnsec-cert-install -f consumer2-dsk.cert
+
+ ndnsec-key-gen -n /ndn/keys/accesscontroller > accesscontroller-unsigned.cert
+ ndnsec-cert-install accesscontroller-unsigned.cert
+ ndnsec-cert-gen -s /ndn/keys/trust -N "Access Controller" -r accesscontroller-unsigned.cert > accesscontroller-ksk.cert
+ ndnsec-cert-install accesscontroller-ksk.cert
+  ndnsec-key-gen -d /ndn/keys/accesscontroller > accesscontroller-dsk.cert
+ ndnsec-cert-install -f accesscontroller-dsk.cert
+
+ ndnsec-key-gen -n /ndn/keys/groupkeysdistributor > groupkeysdistributor-unsigned.cert
+ ndnsec-cert-install groupkeysdistributor-unsigned.cert
+ ndnsec-cert-gen -s /ndn/keys/trust -N "groupkeysdistributor" -r groupkeysdistributor-unsigned.cert > groupkeysdistributor-ksk.cert
+ ndnsec-cert-install groupkeysdistributor-ksk.cert
+  ndnsec-key-gen -d /ndn/keys/groupkeysdistributor > groupkeysdistributor-dsk.cert
+ ndnsec-cert-install -f groupkeysdistributor-dsk.cert
+

@@ -7,7 +7,7 @@
 const std::string KEYNAMES_FILENAME="./keys.txt";
 const std::string VALIDATOR_FILENAME="./config/validation-group-keys-distributor.conf";
 const bool VALIDATED = true;
-const bool NOT_VALIDATED = true;
+const bool NOT_VALIDATED = false;
 
 namespace ndn {
     namespace examples {
