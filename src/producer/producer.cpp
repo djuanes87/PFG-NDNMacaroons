@@ -22,8 +22,6 @@ namespace ndn {
                     std::string key_data = NAME_KEY_DATA + "/" + value;
                     key_group_name = ndn::Name(key_group);
                     key_data_name = ndn::Name(key_data);
-                    std::cout << "Key Group Name: " << key_group_name <<std::endl;
-                    std::cout << "Key Group Name: " << key_data_name <<std::endl;
                     createKeyData();
                     encryptData();
                     enc_files["info"] = enc_message;
@@ -33,7 +31,6 @@ namespace ndn {
 
                 void
                 run(){
-                    // -- ++ -- Direccion donde pedir datos -- ++ --
                     m_face.setInterestFilter(PRODUCER_PREFIX,
                                             bind(&Producer::onInterest, this, _1, _2),
                                             RegisterPrefixSuccessCallback(),
@@ -56,7 +53,6 @@ namespace ndn {
                         m_validator.validate(interest, 
                                             bind(&Producer::setKeyGroup, this, interest),
                                             bind(&Producer::onValidationFailed, this, _1, _2));
-                        //setKeyGroup(interest);
                     }else{
                         sendEncryptedData(interest);
                     }
@@ -174,7 +170,6 @@ namespace ndn {
                     std::cout << "Encrypting this message with data key: " << std::endl
                     << message << std::endl;
 
-                    //ndn::Name key_data_name(NAME_KEY_DATA);
                     enc_message = m_secTpmFile.encryptInTpm((uint8_t*) message.c_str(),
                                                         message.size(), key_data_name, true);
 

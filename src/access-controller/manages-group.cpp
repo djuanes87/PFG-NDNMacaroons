@@ -1,19 +1,6 @@
 
-#include <NDNMacaroon/macaroon-utils.hpp>
-#include <ndn-cxx/face.hpp>
-#include <ndn-cxx/security/key-chain.hpp>
-//#include <ndn-cxx/security/cryptopp.hpp>
-#include <ndn-cxx/util/time.hpp>
-#include <boost/regex.hpp>
-
 #include <manages-group.hpp>
 
-
-#include <boost/regex.hpp>
-
-
-//#include "logging.h"
-//namespace macaroons {
 using std::vector;
 using macaroons::NDNMacaroon;
 using macaroons::NDNMacaroonVerifier;
@@ -57,10 +44,7 @@ ManagesGroup::createMacaroon()
     macaroon = std::make_shared<macaroons::NDNMacaroon>(macLocation, secret, id, MACAROON_SUGGESTED_SECRET_LENGTH);
 
     // 3. add first party caveats
-    macaroon->addFirstPartyCaveat (first_party_caveat_1);
-    macaroon->addFirstPartyCaveat (first_party_caveat_2);
-    macaroon->addFirstPartyCaveat (first_party_caveat_6);
-
+    macaroon->addFirstPartyCaveat (first_party_caveat);
 }
 
 void
@@ -90,22 +74,20 @@ ManagesGroup::verificateMacaroon(std::string serialized_macaroon, ndn::name::Com
 
     std::cout << "Construyendo macaroon" << std::endl;
 
-    // Create NDNMacaroon
     macaroons::NDNMacaroon M = macaroons::NDNMacaroon(serialized_macaroon);
     std::cout << "Macaroon construido" << std::endl;
 
-    // extract discharge macaroons from name
     std::cout << "*** num third party requests " << M.getNumThirdPartyCaveats() << std::endl;
     ndn::ConstBufferPtr decrypted_dm = m_secTpmFile.decryptInTpm(encrypted_dm.value(),
                                                                 encrypted_dm.value_size(),
                                                                 session_key_name,
                                                                 /*symmetric*/ true);
-    // Bind DischargeMacaroon
+
     std::string dm_serialized = std::string(decrypted_dm->buf(), decrypted_dm->buf() + decrypted_dm->size());
     M.addDischarge(std::string(decrypted_dm->buf(), decrypted_dm->buf() + decrypted_dm->size()));
-    std::cout << "***+++ added discharge, nms: " << M.getNumDischargeM() << std::endl;
+    std::cout << "*** added discharge, nms: " << M.getNumDischargeM() << std::endl;
 
-    bool result = verify(&M, "deposit");
+    bool result = verify(&M);
     std::cout << "RESULT: "<< result << std::endl;
     if (!result) {
         std::cout << "verified!" << std::endl;
@@ -144,7 +126,6 @@ ManagesGroup::extractKeyGroup(ndn::name::Component enc_dm, ndn::Name key_public_
 void
 ManagesGroup::addEndorsement(std::string type ,const std::string NAME, const std::string PREFIX, std::shared_ptr<ndn::IdentityCertificate> cert, int index){
 
-    // 2. ksk producer endorsement == (type, name, certname, hash)
     macaroons::e_macaroon::Endorsement* endorsement = e_macaroon.add_endorsements();
 
     std::cout<<">>>> GENERATE Endorsement >>>>>>>>>>>>>>>>>>>>>>>"<<std::endl;
@@ -152,8 +133,7 @@ ManagesGroup::addEndorsement(std::string type ,const std::string NAME, const std
     endorsement->set_kind (type);
     endorsement->set_name(PREFIX);
     std::cout << PREFIX << std::endl;
-    // set certname, which doesn't include the version, i.e.,
-    // the last component of the name
+
     endorsement->set_certname(cert->getName().getPrefix(-1).toUri());
     std::cout << cert->getName().getPrefix(-1).toUri() << std::endl;
 
@@ -168,58 +148,18 @@ ManagesGroup::addEndorsement(std::string type ,const std::string NAME, const std
 }
 
 int
-ManagesGroup::verify(macaroons::NDNMacaroon *M, std::string operationType){
+ManagesGroup::verify(macaroons::NDNMacaroon *M){
     macaroons::NDNMacaroonVerifier verifier;
-
-    // 2. add "exact" rules (x = b)
-    compose_verifier(&verifier, operationType);
-
-    // 3. add general rules (ex. time < ...)
-
-    // IMPORTANT: Note that satisfyGeneral gets a reference to time,
-    // and stores it in the verifier. This reference is used later,
-    // when NDNMacaroon::verify, so time must be declared in the same
-    // scope than the call to verify, or shared pointers must be used.
 
     ndn::time::system_clock::TimePoint now = ndn::time::system_clock::now();
     uint64_t time = (uint64_t)ndn::time::toUnixTimestamp(now).count();
     verifier.satisfyGeneral(macaroons::check_time, (void*)(&time));
 
-    // 4. verify the macaroon M with the verifier V
     std::cout << "SECRET:   " << idsToSecrets[M->getIdentifier()] <<std::endl;
     std::string errorCode;
     int result = M->verify(&verifier, (uint8_t *)idsToSecrets[M->getIdentifier()].c_str(), errorCode);
 
     std::cout << "Verifying ..." << std::endl;
-    if (!result) {
-        std::cout << "verified!\n";
-    } else {
-        std::cout << "not verified! errorCode: " + errorCode << std::endl;
-    }
-
-    // 5. Delete mapping id -> secret. A macaroon is serviced only for
-    // one request in this application
-    //idsToSecrets.erase (M->getIdentifier());
-    //std::cout << "Size of idsToSecrets: " << idsToSecrets.size() << std::endl;
-
     return result;
 }
 
-void
-ManagesGroup::compose_verifier (macaroons::NDNMacaroonVerifier* V, std::string operationType)
-{
-    V->satisfyExact(first_party_caveat_1);
-    V->satisfyExact(first_party_caveat_3);
-    V->satisfyExact(first_party_caveat_4);
-    V->satisfyExact(first_party_caveat_5);
-
-    if (operationType == "deposit")  {
-        V->satisfyExact(first_party_caveat_6);
-    }
-    else if (operationType == "withdraw") {
-        V->satisfyExact(first_party_caveat_7);
-    }
-}// compose_verifier
-
-
-//}

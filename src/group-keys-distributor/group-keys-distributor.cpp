@@ -62,7 +62,7 @@ namespace ndn {
                             sendData(dataName, NULL);
                         }
                     }
-                } // onInterest
+                }
 
 
                 void
@@ -163,7 +163,7 @@ namespace ndn {
                             .appendVersion(); 
                         sendData(dataName, NULL);
                     }
-                }//proccessDischargeMacaroon
+                }
 
                 void
                 getSessionKeyFromInterest(ndn::name::Component encrypted_session_key,
@@ -200,7 +200,7 @@ namespace ndn {
 
                     std::cout << "----------------------------------------" << std::endl;
 
-                }// onValidatedSetSharedSecret
+                }
 
                 std::string
                 whoIsSignature(const Interest& interest){
@@ -228,7 +228,7 @@ namespace ndn {
 
                     if(userName == "")
                         return false;
-                    // types of predicate: user==username group==groupName
+
                     std::cout << "PREDICATE: " << predicate << std::endl;
                     size_t posPred = predicate.find("::", MACAROON_SUGGESTED_SECRET_LENGTH);
                     size_t pos = predicate.find("==", MACAROON_SUGGESTED_SECRET_LENGTH);
@@ -249,7 +249,7 @@ namespace ndn {
                     else
                         return false;
 
-                }// checkPredicate
+                }
 
                 void
                 onRegisterFailed(const Name& prefix, const std::string& reason)

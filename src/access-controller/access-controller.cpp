@@ -42,12 +42,10 @@ namespace ndn {
 
             	void
                 run(){
-                    // -- ++ --access controler requests the public keys producer -- ++ --
                     m_face.setInterestFilter(ACCESS_CONTROLLER_PREFIX,
                                           bind(&AccessController::onInterest, this, _1, _2),
                                           RegisterPrefixSuccessCallback(),
                                           bind(&AccessController::onRegisterFailed, this, _1, _2));
-                    // Waits interest identity, to provide key
                     m_face.setInterestFilter(m_acIdentity,
                                           bind(&AccessController::onKeyInterest, this, _1, _2),
                                           RegisterPrefixSuccessCallback(),
@@ -70,7 +68,6 @@ namespace ndn {
 						m_validator.validate(interest, 
 											bind(&AccessController::updateGroupKey, this, interest),
                                             bind(&AccessController::onValidationInterestFailed, this, _1, _2));
-                    	//updateGroupKey(interest);
                     }
                 }
 
@@ -128,7 +125,6 @@ namespace ndn {
                     	    .appendVersion();
                     	sendData(dataName, NULL);
                 	}else{
-                    	// get <sessionKey> and store in the secTpmFile
                    		ndn::Name session_key_name("/session-key-ac-consumer");
                     	ndn::name::Component encrypted_session_key = interest.getName().at(SESSION_KEY_POS);
                     	getSessionKeyFromInterest(encrypted_session_key, session_key_name);
@@ -144,7 +140,6 @@ namespace ndn {
                   		                                                                    encrypted_dataname.value_size(),
                     	                                                                    session_key_name,
                                                                                         /*symmetric*/ true);
-                    	    // Bind DischargeMacaroon
                     	    std::string dataname_scope = std::string(decrypted_dataname->buf(), decrypted_dataname->buf() + decrypted_dataname->size());
                     	    if(g->checkScope(dataname_scope)){
                     	        dataName.append("authorized");
@@ -177,8 +172,6 @@ namespace ndn {
                     // append encrypted session key to interest name
                     interestName.append(ndn::name::Component(enc_session_key));
                     Interest interest = createInterest(interestName.toUri(), true); 
-
-                    //m_keyChain.signByIdentity(newInterest, m_identity);
 
                     m_face.expressInterest(interest,
                                         bind(&AccessController::onSetSharedSecretData, this, _1, _2, NOT_VALIDATED),

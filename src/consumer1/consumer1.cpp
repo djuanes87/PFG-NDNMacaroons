@@ -35,10 +35,8 @@ namespace ndn {
                 , m_scheduler(m_ioService){
                     loadKeyNames();
                     m_validator.load(VALIDATOR_FILENAME);
-                    srand(std::time(NULL));
-                    std::string value = to_string(rand());
-                    std::string key_group = NAME_KEY_GROUP + "/" + value;
-                    std::string key_data = NAME_KEY_DATA + "/" + value;
+                    std::string key_group = NAME_KEY_GROUP + "/" + numRandom();
+                    std::string key_data = NAME_KEY_DATA + "/" + numRandom();
                     key_group_name = ndn::Name(key_group);
                     key_data_name = ndn::Name(key_data);
                     session_key_GKD = ndn::Name("/session-key-consumer-GKD");
@@ -48,7 +46,6 @@ namespace ndn {
                 run(){
                    
                     requestData();
-                    //m_face.processEvents();
                     m_ioService.run();
                 }
 
@@ -123,8 +120,6 @@ namespace ndn {
 
                 void
                 receivedProducer(const Data& data){
-                    std::cout << "ENTRA RECEIVED PRODUCER" << std::endl;
-
                     std::string command = data.getName().at(4).toUri();
                     if(command == "getKeyData"){
                         receivedKeyData(data);
@@ -135,8 +130,6 @@ namespace ndn {
 
                 void
                 receivedAC(const Data& data){
-                    std::cout << "ENTRA RECEIVED AC" << std::endl;
-
                     std::string command = data.getName().at(2).toUri();
 
                     if(command == "getMacaroon"){
@@ -148,8 +141,6 @@ namespace ndn {
 
                 void
                 receivedGKD(const Data& data){
-                    std::cout << "ENTRA RECEIVED GKD" << std::endl;
-
                     std::string command = data.getName().at(2).toUri();
                     if(command == "getDischargeMacaroon"){
                         onThirdPartyData(data);
@@ -210,7 +201,6 @@ namespace ndn {
 
                 bool
                 decryptingData(){
-                    //ndn::Name key_data_name(NAME_KEY_DATA);
                     if(!m_secTpmFile.doesKeyExistInTpm(key_data_name, KEY_CLASS_SYMMETRIC)){
                         return false;
                     }
@@ -228,7 +218,6 @@ namespace ndn {
 
                 void
                 keyDataNotEncrypted(){
-                    //ndn::Name key_group_name(NAME_KEY_GROUP);
                     if(!m_secTpmFile.doesKeyExistInTpm(key_group_name, KEY_CLASS_SYMMETRIC)){
                         requestMacaroon();
                     }else{
@@ -240,8 +229,6 @@ namespace ndn {
 
                 bool
                 setKeyData(){
-                    //ndn::Name key_group_name(NAME_KEY_GROUP);
-                    //ndn::Name key_data_name(NAME_KEY_DATA);
                     std::cout << "---------------------------------------" << std::endl;
                     std::cout << "Decrypting key data ..." << std::endl;
                     if(!m_secTpmFile.doesKeyExistInTpm(key_group_name, KEY_CLASS_SYMMETRIC)){
@@ -302,7 +289,7 @@ namespace ndn {
                     ndn::Name keyName = ndn::IdentityCertificate::certificateNameToPublicKeyName(certName);
                     std::cout << "Adding to secureChannels: " << name << std::endl;
                     secureChannels[name] = keyName.toUri();
-                    // now we add the key to key chain so we can use it to encrypt
+
                     std::cout << "dsk keyName: " << keyName << std::endl;
 
                     if (!m_keyChain.doesPublicKeyExist(keyName))
@@ -341,7 +328,7 @@ namespace ndn {
                                                 bind(&Consumer::validationDatas, this, _1, _2, NOT_VALIDATED),
                                                 bind(&Consumer::onTimeout, this, _1, 1));
 
-                    }// for
+                    }
                 }
 
                 void
@@ -453,11 +440,12 @@ namespace ndn {
                     << ". The failure info: " << failureInfo << std::endl;
                 }
 
-                /*std::string
+                std::string
                 numRandom(){
-
-                    return 
-                }*/
+                    srand(std::time(NULL));
+                    std::string value = to_string(rand());
+                    return value;
+                }
 
 
                 void

@@ -37,7 +37,7 @@ Group::createDischargeMacaroon(std::string gkd_location, uint8_t *caveat_key, ui
     macaroons::NDNMacaroon D(gkd_location, caveat_key,
                                 identifier, identifier_size);
 
-    D.addFirstPartyCaveat(first_party_caveat_2);
+    D.addFirstPartyCaveat(first_party_caveat);
     discharge =  D.serialize();
     std::cout << "CREATE DM: " << discharge << std::endl;
 }
