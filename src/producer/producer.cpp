@@ -6,8 +6,8 @@
 
 const std::string KEYNAMES_FILENAME="./keys.txt";
 const std::string VALIDATOR_FILENAME="./config/validation-producer.conf";
-const std::string NAME_KEY_GROUP = "/keys/group/Doctors";
-const std::string NAME_KEY_DATA = "/keys/data/Doctors";
+const std::string NAME_KEY_GROUP = "/keys/group/dptoRRHH";
+const std::string NAME_KEY_DATA = "/keys/data/dptoRRHH";
 
 
 namespace ndn {
@@ -46,7 +46,7 @@ namespace ndn {
                 {
                     std::cout << "Request Interest:  " << interest.getName() << std::endl;
                     Name interestName = interest.getName();
-                    //Interest Name: /example/producer/alice/hearbeat/<command or Data>/...
+                    //Interest Name: /example/producer/dptoRRHH/contracts/<command or Data>/...
                     std::string command = interestName.at(COMMAND_POS).toUri();
                     std::cout << "Request operation: " << command <<std::endl;
 
@@ -227,12 +227,12 @@ namespace ndn {
 
             private:
 
-                const std::string PRODUCER_PREFIX = "/example/producer/alice/hearbeat";
+                const std::string PRODUCER_PREFIX = "/example/producer/dptoRRHH/contracts";
                 enum {
                     // 0  --> /example
                     // 1  --> /producer
-                    // 2  --> /alice
-                    // 3  --> /hearbeat
+                    // 2  --> /dptoRRHH
+                    // 3  --> /contracts
                     COMMAND_POS         = 4, // Position of command in name: getMacaroon, deposit, withdraw
                     KEY_GROUP_POS       = 5, // Position of macaroon in name.
 

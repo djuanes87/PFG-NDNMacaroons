@@ -19,9 +19,9 @@
 
 const std::string KEYNAMES_FILENAME="./keys.txt";
 const std::string VALIDATOR_FILENAME="./config/validation-consumer.conf";
-const std::string DATANAME = "/example/producer/alice/hearbeat/";
-const std::string NAME_KEY_GROUP = "/keys/group/Doctors";
-const std::string NAME_KEY_DATA = "/keys/data/Doctors";
+const std::string DATANAME = "/example/producer/dptoRRHH/contracts/";
+const std::string NAME_KEY_GROUP = "/keys/group/dptoRRHH";
+const std::string NAME_KEY_DATA = "/keys/data/dptoRRHH";
 const bool VALIDATED = true;
 const bool NOT_VALIDATED = false;
 
@@ -33,7 +33,6 @@ namespace ndn {
                 Consumer() 
                 : m_face(m_ioService) // Create face with io_service object
                 , m_scheduler(m_ioService){
-                    std::cout << "ENTRA" << std::endl;
                     loadKeyNames();
                     m_validator.load(VALIDATOR_FILENAME);
                     srand(std::time(NULL));
@@ -78,7 +77,7 @@ namespace ndn {
                 void
                 requestMacaroon(){
                     std::cout << "REQUEST MACAROON:  " << std::endl;
-                    ndn::Interest interest = createInterest("/example/accesscontroller/getMacaroon/Doctors", false);
+                    ndn::Interest interest = createInterest("/example/accesscontroller/getMacaroon/dptoRRHH", false);
                     m_face.expressInterest(interest,
                                             bind(&Consumer::validationDatas, this, _1, _2, NOT_VALIDATED),
                                             bind(&Consumer::onTimeout, this, _1, 1));
@@ -142,7 +141,7 @@ namespace ndn {
 
                     if(command == "getMacaroon"){
                         receivedMacaroon(data);
-                    }else if(command == "update_group_key"){
+                    }else if(command == "updateGroupKey"){
                         responseValidatedMacaroonAndDischargue(data);
                     }
                 }
@@ -333,7 +332,7 @@ namespace ndn {
                         Name interestName(group_keys_distributor);
                         interestName.append(ndn::name::Component(enc_session_key))
                                     .append(ndn::name::Component(*tp_id_sp))
-                                    .append("Doctors")
+                                    .append("dptoRRHH")
                                     .append("V1");
 
                         Interest interest = createInterest(interestName.toUri(), true);
@@ -383,12 +382,12 @@ namespace ndn {
                                                                                 true  /* symmetric */);
                     setKeyGroup(dm);
 
-                    Name interestName(macaroon->getLocation() + "/update_group_key");
+                    Name interestName(macaroon->getLocation() + "/updateGroupKey");
                     interestName.append(ndn::name::Component(enc_session_key));
                     interestName.append(serialized_macaroon);
                     interestName.append(ndn::name::Component(enc_dischargue));
                     interestName.append(ndn::name::Component(enc_dataname));
-                    interestName.append("Doctors");
+                    interestName.append("dptoRRHH");
                     interestName.append("V1");
 
                     Interest interest = createInterest(interestName.toUri(), true);

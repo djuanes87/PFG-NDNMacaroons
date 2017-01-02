@@ -19,10 +19,10 @@ namespace ndn {
                     m_validator.load(VALIDATOR_FILENAME);
                     keyNameToUser[m_princKeyNames[ACCESS_CONTROLLER_KSK]] = "accesscontroller";
                     keyNameToUser[m_princKeyNames[CONSUMER1_KSK]] = "consumer1";
-                    std::shared_ptr<Group> doctors = make_shared<Group>();
-                    doctors->setName("Doctors");
-                    doctors->addMember(keyNameToUser[m_princKeyNames[CONSUMER1_KSK]]);
-                    listGroups["Doctors"] = doctors;
+                    std::shared_ptr<Group> dptoRRHH = make_shared<Group>();
+                    dptoRRHH->setName("dptoRRHH");
+                    dptoRRHH->addMember(keyNameToUser[m_princKeyNames[CONSUMER1_KSK]]);
+                    listGroups["dptoRRHH"] = dptoRRHH;
                 }
 
                 void

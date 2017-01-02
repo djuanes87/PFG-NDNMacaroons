@@ -24,19 +24,19 @@ namespace ndn {
             		loadKeyNames();
             		m_validator.load(VALIDATOR_FILENAME);
                     sharedSecret();
-                    std::shared_ptr<ManagesGroup> doctors = make_shared<ManagesGroup>();
-                    doctors->setArgs("Doctors", "/example/producer/alice/hearbeat",
+                    std::shared_ptr<ManagesGroup> dptoRRHH = make_shared<ManagesGroup>();
+                    dptoRRHH->setArgs("dptoRRHH", "/example/producer/dptoRRHH/contracts",
                                     ACCESS_CONTROLLER_PREFIX, "/example/groupKeysDistributor",
                                     HINT_SHARED_KEY_GKD);
-                    doctors->addThirdPartyCaveat();
+                    dptoRRHH->addThirdPartyCaveat();
                     std::string kn = m_princKeyNames[ACCESS_CONTROLLER_DSK];
                     std::shared_ptr<ndn::IdentityCertificate> cert = m_keyChain.getCertificate(m_keyChain.getDefaultCertificateNameForKey(ndn::Name(kn)));
-                    doctors->addEndorsement("dsk", kn, ACCESS_CONTROLLER_PREFIX, cert, 0);
+                    dptoRRHH->addEndorsement("dsk", kn, ACCESS_CONTROLLER_PREFIX, cert, 0);
                     kn = m_princKeyNames[GROUP_KEYS_DISTRIBUTOR_DSK];
                     cert = m_keyChain.getCertificate(m_keyChain.getDefaultCertificateNameForKey(ndn::Name(kn)));
-                    doctors->addEndorsement("dsk", kn, "/example/groupKeysDistributor/getDischargeMacaroon/" + HINT_SHARED_KEY_GKD, cert, 1);
+                    dptoRRHH->addEndorsement("dsk", kn, "/example/groupKeysDistributor/getDischargeMacaroon/" + HINT_SHARED_KEY_GKD, cert, 1);
 
-                    listGroups["Doctors"] = doctors;
+                    listGroups["dptoRRHH"] = dptoRRHH;
 
             	}
 
@@ -66,7 +66,7 @@ namespace ndn {
 
                     if(command == "getMacaroon"){
                     	getMacaroon(interest);
-                    }else if(command == "update_group_key"){
+                    }else if(command == "updateGroupKey"){
 						m_validator.validate(interest, 
 											bind(&AccessController::updateGroupKey, this, interest),
                                             bind(&AccessController::onValidationInterestFailed, this, _1, _2));
@@ -220,7 +220,7 @@ namespace ndn {
                         					bind(&AccessController::establisedKeyGroup, this, interest, data, dataName, VALIDATED),
                                             bind(&AccessController::onValidationDataFailed, this, _1, _2));
                     }else{
-                    	std::string result = data.getName()[-1].toUri();
+                    	std::string result = data.getName()[RESULT_OPERATION].toUri();
                     	std::cout << "---------------------------------------------" << std::endl;
                     	if(result == "sucefull"){
 							std::cout << "Established group password in Producer" << std::endl;
@@ -413,7 +413,10 @@ namespace ndn {
 
                     // Discharge i is in MACAROON_POS + i ...
                     INTEREST_SIG_VALUE  = -1,
-                    INTEREST_SIG_INFO   = -2
+                    INTEREST_SIG_INFO   = -2,
+
+
+                    RESULT_OPERATION	= -1
                 };
 
                 enum princEnum_t {PRODUCER_KSK, PRODUCER_DSK,
