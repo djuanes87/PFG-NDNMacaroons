@@ -28,6 +28,7 @@ namespace ndn {
                     encryptData();
                     enc_files["info"] = enc_message;
                     loadKeyNames();
+                    m_validator.load(VALIDATOR_FILENAME);
                 }
 
                 void
@@ -52,7 +53,10 @@ namespace ndn {
                     if(command == "getKeyData"){
                         getKeyData(interest);
                     }else if(command == "setKeyGroup"){
-                        setKeyGroup(interest);
+                        m_validator.validate(interest, 
+                                            bind(&Producer::setKeyGroup, this, interest),
+                                            bind(&Producer::onValidationFailed, this, _1, _2));
+                        //setKeyGroup(interest);
                     }else{
                         sendEncryptedData(interest);
                     }
@@ -191,6 +195,13 @@ namespace ndn {
 
                     std::cout << "Symmetric key generated ..." << std::endl; 
                     std::cout << "-----------------------------------" << std::endl;
+                }
+
+                void
+                onValidationFailed(const shared_ptr<const Interest>& interest, const std::string& failureInfo)
+                {
+                    std::cerr << "Not validated data: " << interest->getName()
+                    << ". The failure info: " << failureInfo << std::endl;
                 }
 
 

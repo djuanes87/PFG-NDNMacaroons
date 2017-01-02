@@ -10,7 +10,9 @@
 const unsigned NUM_RETRIES = 1;
 
 const std::string KEYNAMES_FILENAME="./keys.txt";
-const std::string VALIDATOR_FILENAME="./config/validation.conf";
+const std::string VALIDATOR_FILENAME="./config/validation-ac.conf";
+const bool VALIDATED = true;
+const bool NOT_VALIDATED = false;
 
 
 namespace ndn {
@@ -20,6 +22,7 @@ namespace ndn {
             public:
             	AccessController() {
             		loadKeyNames();
+            		m_validator.load(VALIDATOR_FILENAME);
                     sharedSecret();
                     std::shared_ptr<ManagesGroup> doctors = make_shared<ManagesGroup>();
                     doctors->setArgs("Doctors", "/example/producer/alice/hearbeat",
@@ -64,7 +67,10 @@ namespace ndn {
                     if(command == "getMacaroon"){
                     	getMacaroon(interest);
                     }else if(command == "update_group_key"){
-                    	updateGroupKey(interest);
+						m_validator.validate(interest, 
+											bind(&AccessController::updateGroupKey, this, interest),
+                                            bind(&AccessController::onValidationInterestFailed, this, _1, _2));
+                    	//updateGroupKey(interest);
                     }
                 }
 
@@ -175,7 +181,7 @@ namespace ndn {
                     //m_keyChain.signByIdentity(newInterest, m_identity);
 
                     m_face.expressInterest(interest,
-                                        bind(&AccessController::onSetSharedSecretData, this, _1, _2, true),
+                                        bind(&AccessController::onSetSharedSecretData, this, _1, _2, NOT_VALIDATED),
                                         bind(&AccessController::onTimeoutSharedSecret, this, _1, 1));
                 }
 
@@ -183,8 +189,9 @@ namespace ndn {
                 onSetSharedSecretData(const Interest& interest, const Data& data, bool validated)
                 {
                     if(!validated){
-                        m_validator.validate(data, bind(&AccessController::onSetSharedSecretData, this, interest, data, true),
-                                            bind(&AccessController::onValidationFailed, this, _1, _2));
+                        m_validator.validate(data, 
+                        					bind(&AccessController::onSetSharedSecretData, this, interest, data, VALIDATED),
+                                            bind(&AccessController::onValidationDataFailed, this, _1, _2));
                     }else{
                         std::cout << "setSharedSecret done" << std::endl;
                         std::cout << "Validated data: " << data.getName() << std::endl;
@@ -199,7 +206,7 @@ namespace ndn {
                     interestName.append(ndn::Name::Component(enc_key_group));
                     Interest interest = createInterest(interestName.toUri(), true);
                     m_face.expressInterest(interest,
-                                        bind(&AccessController::establisedKeyGroup, this, _1, _2, dataname_consumer, true),
+                                        bind(&AccessController::establisedKeyGroup, this, _1, _2, dataname_consumer, NOT_VALIDATED),
                                         bind(&AccessController::onTimeout, this, _1, dataname_consumer, 1));
 
                     std::cout << "---------------------------------------------" << std::endl;
@@ -209,11 +216,17 @@ namespace ndn {
                 establisedKeyGroup(const Interest& interest, const Data& data, ndn::Name dataName ,bool validated )
                 {
                     if(!validated){
-                        m_validator.validate(data, bind(&AccessController::establisedKeyGroup, this, interest, data, dataName, true),
-                                            bind(&AccessController::onValidationFailed, this, _1, _2));
+                        m_validator.validate(data, 
+                        					bind(&AccessController::establisedKeyGroup, this, interest, data, dataName, VALIDATED),
+                                            bind(&AccessController::onValidationDataFailed, this, _1, _2));
                     }else{
-                        std::cout << "---------------------------------------------" << std::endl;
-                    	std::cout << "Established group password in Producer" << std::endl;
+                    	std::string result = data.getName()[-1].toUri();
+                    	std::cout << "---------------------------------------------" << std::endl;
+                    	if(result == "sucefull"){
+							std::cout << "Established group password in Producer" << std::endl;
+                    	}else if(result == "alreadyExist"){
+							std::cout << "The group key already exists" << std::endl;
+						}
                     	std::cout << "---------------------------------------------" << std::endl;
                     }
                 }// onData
@@ -268,7 +281,8 @@ namespace ndn {
                     return interest;
                 }
 
-                void sendData(ndn::Name dataName, shared_ptr<Buffer> content){
+                void 
+                sendData(ndn::Name dataName, shared_ptr<Buffer> content){
                 	std::cout << "----------------------------------------------" << std::endl;
                     shared_ptr<Data> data = make_shared<Data>();
                     data->setName(dataName);
@@ -295,9 +309,16 @@ namespace ndn {
                 }
 
                 void
-                onValidationFailed(const shared_ptr<const Data>& data, const std::string& failureInfo)
+                onValidationDataFailed(const shared_ptr<const Data>& data, const std::string& failureInfo)
                 {
                     std::cerr << "Not validated data: " << data->getName()
+                    << ". The failure info: " << failureInfo << std::endl;
+                }
+
+                void
+                onValidationInterestFailed(const shared_ptr<const Interest>& interest, const std::string& failureInfo)
+                {
+                    std::cerr << "Not validated data: " << interest->getName()
                     << ". The failure info: " << failureInfo << std::endl;
                 }
 
@@ -307,7 +328,7 @@ namespace ndn {
                     retries--;
                     if (retries != 0)
                     m_face.expressInterest(interest,
-                                    bind(&AccessController::onSetSharedSecretData, this,  _1, _2, true),
+                                    bind(&AccessController::onSetSharedSecretData, this,  _1, _2, NOT_VALIDATED),
                                     bind(&AccessController::onTimeoutSharedSecret, this, _1, retries));
 
                     std::cout << "Timeout " << " retries: " << retries << "  " << interest  << std::endl;
@@ -319,8 +340,8 @@ namespace ndn {
                     retries--;
                     if (retries != 0)
                         m_face.expressInterest(interest,
-                                            bind(&AccessController::establisedKeyGroup, this, _1, _2, dataname, true),
-                                            bind(&AccessController::onTimeout, this, _1, dataname,1));
+                                            bind(&AccessController::establisedKeyGroup, this, _1, _2, dataname, NOT_VALIDATED),
+                                            bind(&AccessController::onTimeout, this, _1, dataname, 1));
 
                     std::cout << "Timeout " << " retries: " << retries << "  " << interest  << std::endl;
                 } //onTimeout

@@ -5,7 +5,7 @@
 #include <group.hpp>
 
 const std::string KEYNAMES_FILENAME="./keys.txt";
-const std::string VALIDATOR_FILENAME="./config/validation-group-keys-distributor.conf";
+const std::string VALIDATOR_FILENAME="./config/validation.conf";
 const bool VALIDATED = true;
 const bool NOT_VALIDATED = false;
 
@@ -27,7 +27,6 @@ namespace ndn {
 
                 void
                 run(){
-                    // Waits interest producer identity, to provide producer key
                     m_face.setInterestFilter(GROUP_KEYS_DISTRIBUTOR_PREFIX,
                                         bind(&GroupKeysDistributor::onInterest, this, _1, _2, NOT_VALIDATED),
                                         RegisterPrefixSuccessCallback(),
@@ -61,10 +60,7 @@ namespace ndn {
                             ndn::Name dataName(interest.getName());
                             dataName.append("established");
                             sendData(dataName, NULL);
-                        }else{
-
                         }
-
                     }
                 } // onInterest
 
@@ -158,13 +154,13 @@ namespace ndn {
                                                     session_key_name,
                                                     true);
                         dataName
-                            .append("authenticated") // add "result" component to Interest name
-                            .appendVersion();  // add "version" component (current UNIX timestamp in milliseconds)
+                            .append("authenticated")
+                            .appendVersion();
                         sendData(dataName, encrypted_serialized_disMacaroon);
                     }else{
                         dataName
-                            .append("notAuthenticated") // add "result" component to Interest name
-                            .appendVersion();  // add "version" component (current UNIX timestamp in milliseconds)
+                            .append("notAuthenticated") 
+                            .appendVersion(); 
                         sendData(dataName, NULL);
                     }
                 }//proccessDischargeMacaroon

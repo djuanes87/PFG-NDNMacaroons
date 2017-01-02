@@ -18,9 +18,12 @@
 #include <map>
 
 const std::string KEYNAMES_FILENAME="./keys.txt";
+const std::string VALIDATOR_FILENAME="./config/validation-consumer.conf";
 const std::string DATANAME = "/example/producer/alice/hearbeat/";
 const std::string NAME_KEY_GROUP = "/keys/group/Doctors";
 const std::string NAME_KEY_DATA = "/keys/data/Doctors";
+const bool VALIDATED = true;
+const bool NOT_VALIDATED = false;
 
 namespace ndn {
     namespace examples {
@@ -32,12 +35,14 @@ namespace ndn {
                 , m_scheduler(m_ioService){
                     std::cout << "ENTRA" << std::endl;
                     loadKeyNames();
+                    m_validator.load(VALIDATOR_FILENAME);
                     srand(std::time(NULL));
                     std::string value = to_string(rand());
                     std::string key_group = NAME_KEY_GROUP + "/" + value;
                     std::string key_data = NAME_KEY_DATA + "/" + value;
                     key_group_name = ndn::Name(key_group);
                     key_data_name = ndn::Name(key_data);
+                    session_key_GKD = ndn::Name("/session-key-consumer-GKD");
                 }
 
                 void
@@ -57,7 +62,7 @@ namespace ndn {
                     std::cout << "REQUEST DATA:  " << std::endl;
                     ndn::Interest interest = createInterest(DATANAME + "info", false);
                     m_face.expressInterest(interest,
-                                            bind(&Consumer::receivedData, this, _1, _2),
+                                            bind(&Consumer::validationDatas, this, _1, _2, NOT_VALIDATED),
                                             bind(&Consumer::onTimeout, this, _1, 1));
                 }
 
@@ -66,7 +71,7 @@ namespace ndn {
                     std::cout << "REQUEST DATA:  " << std::endl;
                     ndn::Interest interest = createInterest(DATANAME + "getKeyData", false);
                     m_face.expressInterest(interest,
-                                            bind(&Consumer::receivedKeyData, this, _1, _2),
+                                            bind(&Consumer::validationDatas, this, _1, _2, NOT_VALIDATED),
                                             bind(&Consumer::onTimeout, this, _1, 1));
                 }
 
@@ -75,7 +80,7 @@ namespace ndn {
                     std::cout << "REQUEST MACAROON:  " << std::endl;
                     ndn::Interest interest = createInterest("/example/accesscontroller/getMacaroon/Doctors", false);
                     m_face.expressInterest(interest,
-                                            bind(&Consumer::receivedMacaroon, this, _1, _2),
+                                            bind(&Consumer::validationDatas, this, _1, _2, NOT_VALIDATED),
                                             bind(&Consumer::onTimeout, this, _1, 1));
                 }
 
@@ -100,7 +105,60 @@ namespace ndn {
                 // ********************************************************
 
                 void
-                receivedData(const Interest& interest, const Data& data) {
+                validationDatas(const Interest& interest, const Data& data, const bool validated){
+                    if(!validated){
+                        m_validator.validate(data, 
+                                            bind(&Consumer::validationDatas, this, interest, data, VALIDATED),
+                                            bind(&Consumer::onValidationDataFailed, this, _1, _2));
+                    }else{
+                        std::string entity = data.getName().at(1).toUri();
+                        if(entity == "producer"){
+                            receivedProducer(data);
+                        }else if(entity == "accesscontroller"){
+                            receivedAC(data);
+                        }else if(entity == "groupKeysDistributor"){
+                            receivedGKD(data);
+                        } 
+                    }
+                }
+
+                void
+                receivedProducer(const Data& data){
+                    std::cout << "ENTRA RECEIVED PRODUCER" << std::endl;
+
+                    std::string command = data.getName().at(4).toUri();
+                    if(command == "getKeyData"){
+                        receivedKeyData(data);
+                    }else{
+                        receivedData(data);
+                    }
+                }
+
+                void
+                receivedAC(const Data& data){
+                    std::cout << "ENTRA RECEIVED AC" << std::endl;
+
+                    std::string command = data.getName().at(2).toUri();
+
+                    if(command == "getMacaroon"){
+                        receivedMacaroon(data);
+                    }else if(command == "update_group_key"){
+                        responseValidatedMacaroonAndDischargue(data);
+                    }
+                }
+
+                void
+                receivedGKD(const Data& data){
+                    std::cout << "ENTRA RECEIVED GKD" << std::endl;
+
+                    std::string command = data.getName().at(2).toUri();
+                    if(command == "getDischargeMacaroon"){
+                        onThirdPartyData(data);
+                    }
+                }
+
+                void
+                receivedData(const Data& data) {
 
                     if(data.getName()[-1].toUri() == "notFound"){
                         std::cout << "DATA FILE NOT FOUND" << std::endl;
@@ -114,7 +172,7 @@ namespace ndn {
                 }
 
                 void
-                receivedKeyData(const Interest& interest, const Data& data) {
+                receivedKeyData(const Data& data) {
 
                     if(data.getName()[-1].toUri() == "notEncrypted"){
                         keyDataNotEncrypted();
@@ -129,7 +187,7 @@ namespace ndn {
                 }
 
                 void
-                receivedMacaroon(const Interest& interest, const Data& data) {
+                receivedMacaroon(const Data& data) {
                     std::cout << "MACAROON RECEIVED ..." << std::endl;
                     macaroons::e_macaroon e_macaroon;
                     e_macaroon.ParseFromArray(data.getContent().value(), data.getContent().value_size());
@@ -270,8 +328,7 @@ namespace ndn {
 
                         std::cout << "GROUP KEYS DISTRIBUTOR: " << group_keys_distributor << std::endl;
 
-                        ndn::Name session_key_name(std::string("/session-key-consumer") + std::string("-") + std::to_string(i));
-                        ndn::ConstBufferPtr enc_session_key = createSessionKey(group_keys_distributor, session_key_name);
+                        ndn::ConstBufferPtr enc_session_key = createSessionKey(group_keys_distributor, session_key_GKD);
 
                         Name interestName(group_keys_distributor);
                         interestName.append(ndn::name::Component(enc_session_key))
@@ -282,14 +339,14 @@ namespace ndn {
                         Interest interest = createInterest(interestName.toUri(), true);
 
                         m_face.expressInterest(interest,
-                                                bind(&Consumer::onThirdPartyData, this, _2, session_key_name),
+                                                bind(&Consumer::validationDatas, this, _1, _2, NOT_VALIDATED),
                                                 bind(&Consumer::onTimeout, this, _1, 1));
 
                     }// for
                 }
 
                 void
-                onThirdPartyData(const Data& data, ndn::Name& session_key_name){
+                onThirdPartyData(const Data& data){
 
                     if (data.getName()[-2].toUri() == "authenticated") {
                         std::cout << "authenticated!" << std::endl;
@@ -297,7 +354,7 @@ namespace ndn {
                         ndn::ConstBufferPtr decrypted_content =
                         m_secTpmFile.decryptInTpm(data.getContent().value(),
                                                 data.getContent().value_size(),
-                                                session_key_name, /*symmetric*/ true);
+                                                session_key_GKD, /*symmetric*/ true);
 
                         std::string dm = std::string(decrypted_content->buf(), decrypted_content->buf() + decrypted_content->size());
 
@@ -311,7 +368,7 @@ namespace ndn {
                 void
                 validateMacaroonAndDischargue(){
 
-                    ndn::Name session_key_name(std::string("/session-key-consumer"));
+                    ndn::Name session_key_name(std::string("/session-key-consumer-AC"));
                     ndn::ConstBufferPtr enc_session_key = createSessionKey(macaroon->getLocation(), session_key_name);
 
                     std::string serialized_macaroon = macaroon->serialize();
@@ -337,12 +394,12 @@ namespace ndn {
                     Interest interest = createInterest(interestName.toUri(), true);
 
                     m_face.expressInterest(interest,
-                                            bind(&Consumer::responseValidatedMacaroonAndDischargue, this,  _1, _2),
+                                            bind(&Consumer::validationDatas, this,  _1, _2, NOT_VALIDATED),
                                             bind(&Consumer::onTimeout, this, _1, 1));
                 }
 
                 void
-                responseValidatedMacaroonAndDischargue(const Interest& interest, const Data& data) {
+                responseValidatedMacaroonAndDischargue(const Data& data) {
                     if (data.getName()[-1].toUri() == "authorized") {
                         if(enc_key_data == ""){
                             requestKeyData();
@@ -390,6 +447,19 @@ namespace ndn {
                     fetchCertificate(e_macaroon, valid_names, index + 1);
                 }
 
+                void
+                onValidationDataFailed(const shared_ptr<const Data>& data, const std::string& failureInfo)
+                {
+                    std::cerr << "Not validated data: " << data->getName()
+                    << ". The failure info: " << failureInfo << std::endl;
+                }
+
+                /*std::string
+                numRandom(){
+
+                    return 
+                }*/
+
 
                 void
                 loadKeyNames()
@@ -434,6 +504,8 @@ namespace ndn {
                 ValidatorConfig m_validator;
                 std::map<std::string, std::string> secureChannels;
                 shared_ptr<macaroons::NDNMacaroon> macaroon;
+
+                ndn::Name session_key_GKD;
 
                 //dataEncrypted
                 std::string enc_data;
