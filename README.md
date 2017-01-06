@@ -10,9 +10,9 @@ Esta implementación ha sido probada sobre Ubuntu 16.04.
 Requerido:
 
 * [ndn-cxx y sus dependencias](http://named-data.net/doc/ndn-cxx/0.4.1/INSTALL.html)
- [repositorio ndn-cxx 0.4.1](https://github.com/named-data/ndn-cxx/releases/tag/ndn-cxx-0.4.1)
+* [repositorio ndn-cxx 0.4.1](https://github.com/named-data/ndn-cxx/releases/tag/ndn-cxx-0.4.1)
 * [Networking Forwarding Daemon(NFD)](http://named-data.net/doc/NFD/0.4.1/INSTALL.html)
- [repositorio NFD 0.4.1](https://github.com/named-data/NFD/releases/tag/NFD-0.4.1)
+* [repositorio NFD 0.4.1](https://github.com/named-data/NFD/releases/tag/NFD-0.4.1)
 * Boost libraries
 * [libmacaroons](https://github.com/rescrv/libmacaroons)
 * [protobuf](https://github.com/google/protobuf)
