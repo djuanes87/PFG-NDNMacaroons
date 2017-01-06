@@ -32,12 +32,14 @@ los comandos en el siguiente orden dentro del directorio
 Para construir el ejemplo del sistema de delegación de permisos
 para acceder a recursos, hay que ejecutar los siguientes comandos
 en el directorio `PFG-NDNMacaroons/`:
+
 	./waf configure
 	./waf
 
 ###Ejecutar el ejemplo
 
 Existen 4 programas principales:
+
    - *Producer*: publica los datos cifrados y las claves de datos tambien cifradas.
    - *Access Controller*: provee del Macaroon necesario para acceder a la clave de grupo y poder descifrar los datos.
    - *Group Keys Distributor*: provee del Discharge Macaroon con la clave de grupo.
@@ -49,7 +51,7 @@ Existen 4 programas principales:
 Antes de ejecutar el ejemplo es necesario crear las claves DSK y KSK utilizadas por las entidades ya nombradas. Para crear las claves KSK/DSK ejecute el script desde el directorio `PFG-NDNMacaroon/`:
 	./keys.sh
 
-Ejecutar cada programa en un terminal diferente en el siguiente orden, desde el directorio `PFG-NDNMacaroons/:
+Ejecutar cada programa en un terminal diferente en el siguiente orden, desde el directorio `PFG-NDNMacaroons/`:
 
 	1)Producer:			./build/bin/producer/producer
 	2)Group Keys Distributor:	./build/bin/group-keys-distributor/group-keys-distributor
