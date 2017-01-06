@@ -49,6 +49,7 @@ Existen 4 programas principales:
 				Descifra los datos con la clave de grupo obtenida.
 
 Antes de ejecutar el ejemplo es necesario crear las claves DSK y KSK utilizadas por las entidades ya nombradas. Para crear las claves KSK/DSK ejecute el script desde el directorio `PFG-NDNMacaroon/`:
+
 	./keys.sh
 
 Ejecutar cada programa en un terminal diferente en el siguiente orden, desde el directorio `PFG-NDNMacaroons/`:
