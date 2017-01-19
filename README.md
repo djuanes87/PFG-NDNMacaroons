@@ -33,6 +33,8 @@ Para construir el ejemplo del sistema de delegación de permisos
 para acceder a recursos, hay que ejecutar los siguientes comandos
 en el directorio `PFG-NDNMacaroons/`:
 
+	protoc --cpp_out=./src/consumer1/ ./src/consumer1/e_macaroon.proto
+	protoc --cpp_out=./src/access-controller/ ./src/access-controller/e_macaroon.proto
 	./waf configure
 	./waf
 
@@ -54,7 +56,8 @@ Antes de ejecutar el ejemplo es necesario crear las claves DSK y KSK utilizadas 
 
 Ejecutar cada programa en un terminal diferente en el siguiente orden, desde el directorio `PFG-NDNMacaroons/`:
 
-	1)Producer:			./build/bin/producer/producer
-	2)Group Keys Distributor:	./build/bin/group-keys-distributor/group-keys-distributor
-	3)Access Controller:		./build/bin/access-controller/access-controller
-	4)Consumer1:			./build/bin/consumer1/consumer1
+	1)NFD:				nfd-start
+	2)Producer:			./build/bin/producer/producer
+	3)Group Keys Distributor:	./build/bin/group-keys-distributor/group-keys-distributor
+	4)Access Controller:		./build/bin/access-controller/access-controller
+	5)Consumer1:			./build/bin/consumer1/consumer1
