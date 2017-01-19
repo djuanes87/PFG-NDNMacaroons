@@ -42,7 +42,7 @@ en el directorio `PFG-NDNMacaroons/`:
 
 Existen 4 programas principales:
 
-   - *Producer*: publica los datos cifrados y las claves de datos tambien cifradas.
+   - *Producer*: publica los datos cifrados y las claves de datos también cifradas.
    - *Access Controller*: provee del Macaroon necesario para acceder a la clave de grupo y poder descifrar los datos.
    - *Group Keys Distributor*: provee del Discharge Macaroon con la clave de grupo.
    - *Consumer1*: solicita los datos cifrados y la clave de datos cifrada a Producer.
